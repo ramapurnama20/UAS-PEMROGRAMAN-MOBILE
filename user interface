@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Data Display</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      font-size: 1.2em;
+      color: #555;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Detail Artikel</h1>
+
+    <div class="section" id="article">
+      <h2>Article</h2>
+      <p><strong>ID:</strong> <span id="article-id"></span></p>
+      <p><strong>Title:</strong> <span id="article-title"></span></p>
+      <p><strong>Link:</strong> <a id="article-link" href="" target="_blank">View Article</a></p>
+    </div>
+
+    <div class="section" id="author">
+      <h2>Author</h2>
+      <p><strong>ID:</strong> <span id="author-id"></span></p>
+      <p><strong>Link:</strong> <a id="author-link" href="" target="_blank">View Author</a></p>
+    </div>
+
+    <div class="section" id="comments">
+      <h2>Comments</h2>
+      <ul id="comments-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // JSON data
+    const jsonData = {
+      "data": {
+        "type": "articles",
+        "id": "1",
+        "attributes": {
+          "title": "JSON: API paints my bikeshed!"
+        },
+        "relationships": {
+          "author": {
+            "links": {
+              "self": "http://example.com/articles/1/relationships/author",
+              "related": "http://example.com/articles/1/author"
+            },
+            "data": { "type": "people", "id": "9" }
+          },
+          "comments": {
+            "links": {
+              "self": "http://example.com/articles/1/relationships/comments",
+              "related": "http://example.com/articles/1/comments"
+            },
+            "data": [
+              { "type": "comments", "id": "5" },
+              { "type": "comments", "id": "12" }
+            ]
+          }
+        },
+        "links": {
+          "self": "http://example.com/articles/1"
+        }
+      }
+    };
+
+    // Populate UI with JSON data
+    document.getElementById("article-id").textContent = jsonData.data.id;
+    document.getElementById("article-title").textContent = jsonData.data.attributes.title;
+    document.getElementById("article-link").href = jsonData.data.links.self;
+
+    const authorData = jsonData.data.relationships.author;
+    document.getElementById("author-id").textContent = authorData.data.id;
+    document.getElementById("author-link").href = authorData.links.related;
+
+    const commentsData = jsonData.data.relationships.comments.data;
+    const commentsList = document.getElementById("comments-list");
+    commentsData.forEach(comment => {
+      const li = document.createElement("li");
+      li.textContent = `Comment ID: ${comment.id}`;
+      commentsList.appendChild(li);
+    });
+  </script>
+</body>
+</html>
