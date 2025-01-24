@@ -1,0 +1,42 @@
+// Logic to consume JSON data
+function consumeJSON(data) {
+  // Extract main article details
+  const articleId = data.data.id;
+  const articleTitle = data.data.attributes.title;
+  const articleLink = data.data.links.self;
+
+  // Extract author details
+  const authorId = data.data.relationships.author.data.id;
+  const authorLink = data.data.relationships.author.links.related;
+
+  // Extract comments
+  const comments = data.data.relationships.comments.data.map(comment => comment.id);
+
+  // Display the results
+  console.log("Article Details:");
+  console.log(`ID: ${articleId}`);
+  console.log(`Title: ${articleTitle}`);
+  console.log(`Link: ${articleLink}`);
+  console.log("\nAuthor Details:");
+  console.log(`Author ID: ${authorId}`);
+  console.log(`Author Link: ${authorLink}`);
+  console.log("\nComments:");
+  comments.forEach((commentId, index) => {
+    console.log(`Comment ${index + 1}: ID ${commentId}`);
+  });
+}
+
+Penjelasan Logika:
+Memproses Data Utama Artikel:
+
+Mengambil ID artikel, judul artikel, dan tautan self dari bagian data.
+Memproses Informasi Penulis:
+
+Mengambil ID penulis dari relationships.author.data.
+Mengambil tautan ke data penulis dari relationships.author.links.related.
+Memproses Komentar:
+
+Mengiterasi array relationships.comments.data untuk mendapatkan ID setiap komentar.
+Menampilkan Data:
+
+Data artikel, penulis, dan komentar ditampilkan di konsol untuk menunjukkan bahwa JSON berhasil dikonsumsi dan diproses.
